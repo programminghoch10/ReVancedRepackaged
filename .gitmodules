@@ -1,0 +1,3 @@
+[submodule "revanced-cli"]
+	path = revanced-cli
+	url = https://github.com/revanced/revanced-cli
