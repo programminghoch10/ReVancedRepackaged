@@ -1,3 +1,9 @@
+.gitauth
 *.apk
 *.zip
 *.jar
+
+magiskmodule/README.md
+magiskmodule/module.prop
+magiskmodule/version.sh
+magiskmodule/aapt2

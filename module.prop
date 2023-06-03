@@ -1,0 +1,7 @@
+id=revancedrepackaged
+name=ReVancedRepackaged
+author=programminghoch10
+version=$VERSIONNAME
+versionCode=$VERSIONCODE
+description=ReVanced, but patched locally. Doing things the right way since 2023.
+updateJson=https://raw.githubusercontent.com/programminghoch10/ReVancedRepackaged/deploy/update.json
