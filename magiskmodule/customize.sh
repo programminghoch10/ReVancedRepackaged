@@ -60,5 +60,7 @@ rm aapt2
 
 cd "$MODPATH"
 
+chcon u:object_r:apk_data_file:s0 revanced.apk
+
 rm wrapper.apk integrations.apk patches.jar
 rm -r aapt2
