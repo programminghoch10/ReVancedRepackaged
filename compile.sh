@@ -39,6 +39,7 @@ done
 cp -v revanced-android/revancedcliwrapper/build/outputs/apk/release/revancedcliwrapper-release.apk magiskmodule/wrapper.apk
 cp -v "$(basename "$REVANCED_INTEGRATIONS")" magiskmodule/integrations.apk
 cp -v "$(basename "$REVANCED_PATCHES")" magiskmodule/patches.jar
+cp -r -v aapt2 magiskmodule/
 cp README.md magiskmodule/README.md
 
 [ -n "$(git status --porcelain)" ] && CHANGES="+" || CHANGES="-"
