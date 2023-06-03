@@ -7,6 +7,9 @@ public class MainCommand{
     public static void main(String[] args) {
         System.out.println("sysout");
         System.err.println("syserr");
+        Runtime runtime = Runtime.getRuntime();
+        long maxMemory = runtime.maxMemory();
+        System.err.println("Memory limit: " + maxMemory);
         try {
             System.err.println("property");
             System.setProperty("java.io.tmpdir", "/data/local/tmp");

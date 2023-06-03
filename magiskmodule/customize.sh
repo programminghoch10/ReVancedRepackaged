@@ -38,6 +38,9 @@ chmod -v +x "$TMPDIR"/aapt2
 cd "$TMPDIR"
 ui_print "   TMPDIR=$TMPDIR"
 
+ui_print "   Increase Heap Growth limit from $(getprop dalvik.vm.heapgrowthlimit) to 4096m"
+resetprop dalvik.vm.heapgrowthlimit 4096m
+
 ui_print "- Patching YouTube APK"
 
 app_process \
