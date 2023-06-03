@@ -31,6 +31,14 @@ git submodule update --checkout
 
 source version.sh
 
+for dlurl in "$REVANCED_INTEGRATIONS" "$REVANCED_PATCHES"; do
+    dlfile="$(basename "$dlurl")"
+    [ ! -f "$dlfile" ] && wget -c -O "$dlfile" "$dlurl"
+done
+
+cp -v revanced-android/revancedcliwrapper/build/outputs/apk/release/revancedcliwrapper-release.apk magiskmodule/wrapper.apk
+cp -v "$(basename "$REVANCED_INTEGRATIONS")" magiskmodule/integrations.apk
+cp -v "$(basename "$REVANCED_PATCHES")" magiskmodule/patches.jar
 cp README.md magiskmodule/README.md
 
 [ -n "$(git status --porcelain)" ] && CHANGES="+" || CHANGES="-"
