@@ -26,3 +26,39 @@ ui_print "- Found YouTube $installedyoutubeversion"
 
 youtubeapkpath=$(pm path "$YOUTUBE_PACKAGE" | grep -E 'package:.*/base\.apk' | cut -d':' -f2)
 ui_print "- Found YouTube APK at $youtubeapkpath"
+
+ui_print "- Preparing Patching Process"
+
+cp -v wrapper.apk patches.jar integrations.apk "$TMPDIR"
+
+[ ! -f aapt2/$ARCH/libaapt2.so ] && abort "Failed to locate libaapt2.so for $ARCH"
+cp -v aapt2/$ARCH/libaapt2.so "$TMPDIR"/aapt2
+chmod -v +x "$TMPDIR"/aapt2
+
+cd "$TMPDIR"
+ui_print "   TMPDIR=$TMPDIR"
+
+ui_print "- Patching YouTube APK"
+
+app_process \
+    -cp wrapper.apk \
+    $(pwd) \
+    com.programminghoch10.revancedandroidcli.MainCommand \
+    -a "$youtubeapkpath" \
+    -c \
+    -o revanced.apk \
+    -b patches.jar \
+    -m integrations.apk \
+    -e vanced-microg-support \
+    --custom-aapt2-binary=$(pwd)/aapt2 \
+2>&1 || abort "Patching failed! $?"
+
+[ ! -f revanced.apk ] && abort "Patching failed!"
+
+mv -v revanced.apk "$MODPATH"/revanced.apk
+rm aapt2
+
+cd "$MODPATH"
+
+rm wrapper.apk integrations.apk patches.jar
+rm -r aapt2
