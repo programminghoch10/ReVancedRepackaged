@@ -1,0 +1,35 @@
+From ff0b5b70d9db4816757e8261f59dc4f451afc9e1 Mon Sep 17 00:00:00 2001
+From: programminghoch10 <16062290+programminghoch10@users.noreply.github.com>
+Date: Mon, 29 May 2023 15:33:36 +0200
+Subject: [PATCH] Load classes in dex mode
+
+Required for loading patches on android
+---
+ .../kotlin/app/revanced/cli/command/MainCommand.kt     | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
+
+diff --git a/src/main/kotlin/app/revanced/cli/command/MainCommand.kt b/src/main/kotlin/app/revanced/cli/command/MainCommand.kt
+index 0d3b954..2fbaa52 100644
+--- a/src/main/kotlin/app/revanced/cli/command/MainCommand.kt
++++ b/src/main/kotlin/app/revanced/cli/command/MainCommand.kt
+@@ -138,8 +138,16 @@ internal object MainCommand : Runnable {
+         val pArgs = this.args.patchArgs?.patchingArgs ?: return
+         val outputFile = File(pArgs.outputPath) // the file to write to
+ 
++        val DexClassLoaderClass = Class.forName("dalvik.system.DexClassLoader")
+         val allPatches = args.patchArgs!!.patchBundles.flatMap { bundle ->
+-            PatchBundle.Jar(bundle).loadPatches()
++            PatchBundle.Dex(bundle,
++                DexClassLoaderClass.getConstructor(
++                    String::class.java,
++                    String::class.java,
++                    String::class.java,
++                    ClassLoader::class.java
++                ).newInstance(bundle, null, null, javaClass.classLoader) as ClassLoader
++            ).loadPatches()
+         }
+ 
+         args.patchArgs!!.optionsFile.let {
+-- 
+2.39.2
+
