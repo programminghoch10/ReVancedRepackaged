@@ -1,0 +1,33 @@
+import org.gradle.api.initialization.resolve.RepositoriesMode
+
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+def githubUsername = System.getenv('GITHUB_ACTOR')
+def githubPassword = System.getenv('GITHUB_TOKEN')
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        mavenCentral()
+        google()
+        maven {
+            url = uri("https://maven.pkg.github.com/revanced/revanced-patcher")
+            credentials {
+                username = githubUsername
+                password = githubPassword
+            }
+        }
+        maven { url = uri("https://jitpack.io") }
+    }
+}
+rootProject.name = "revanced-android"
+include ':revancedcliwrapper'
+
+include ":revancedcli"
+project(":revancedcli").projectDir = file("../revanced-cli")
