@@ -8,6 +8,8 @@ public class MainCommand{
         System.out.println("sysout");
         System.err.println("syserr");
         try {
+            System.err.println("property");
+            System.setProperty("java.io.tmpdir", "/data/local/tmp");
             System.err.println("class");
             Method main = MainKt.class.getMethod("main", String[].class);
             System.err.println("invoke");
