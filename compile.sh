@@ -6,6 +6,9 @@ set -e
 [ -z "$GITHUB_TOKEN" ] && echo "missing GITHUB_TOKEN" && exit 1
 declare -x GITHUB_ACTOR GITHUB_TOKEN
 
+REVANCED_INTEGRATIONS_URL="https://github.com/revanced/revanced-integrations/releases/download/v%s/revanced-integrations-%s.apk"
+REVANCED_PATCHES_URL="https://github.com/revanced/revanced-patches/releases/download/v%s/revanced-patches-%s.jar"
+
 git submodule update --checkout
 
 executeGradle() {
@@ -31,14 +34,19 @@ git submodule update --checkout
 
 source version.sh
 
-for dlurl in "$REVANCED_INTEGRATIONS" "$REVANCED_PATCHES"; do
+REVANCED_INTEGRATIONS=$(sed -e 's/^v//' <<< "$REVANCED_INTEGRATIONS")
+printf -v REVANCED_INTEGRATIONS_DL "$REVANCED_INTEGRATIONS_URL" "$REVANCED_INTEGRATIONS" "$REVANCED_INTEGRATIONS"
+REVANCED_PATCHES=$(sed -e 's/^v//' <<< "$REVANCED_PATCHES")
+printf -v REVANCED_PATCHES_DL "$REVANCED_PATCHES_URL" "$REVANCED_PATCHES" "$REVANCED_PATCHES"
+
+for dlurl in "$REVANCED_INTEGRATIONS_DL" "$REVANCED_PATCHES_DL"; do
     dlfile="$(basename "$dlurl")"
     [ ! -f "$dlfile" ] && wget -c -O "$dlfile" "$dlurl"
 done
 
 cp -v revanced-android/revancedcliwrapper/build/outputs/apk/release/revancedcliwrapper-release.apk magiskmodule/wrapper.apk
-cp -v "$(basename "$REVANCED_INTEGRATIONS")" magiskmodule/integrations.apk
-cp -v "$(basename "$REVANCED_PATCHES")" magiskmodule/patches.jar
+cp -v "$(basename "$REVANCED_INTEGRATIONS_DL")" magiskmodule/integrations.apk
+cp -v "$(basename "$REVANCED_PATCHES_DL")" magiskmodule/patches.jar
 cp -r -v aapt2 magiskmodule/
 cp README.md magiskmodule/README.md
 
