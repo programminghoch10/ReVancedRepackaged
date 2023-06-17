@@ -3,16 +3,13 @@ cd $(dirname $0)
 
 source ./version.sh
 
-err() {
+logi() {
     local msg="ReVancedRepackaged: $1"
     log -t Magisk "$msg"
     echo "$msg" >> /cache/magisk.log
-    touch disable
-    exit 1
 }
 
-REVANCEDAPK="$(pwd)"/revanced.apk
-[ ! -f "$REVANCEDAPK" ] && err "Missing $REVANCEDAPK"
+[ -z "$(ls overlay)" ] && logi "No overlays found!" && touch remove && exit 1
 
 while [ "$(getprop sys.boot_completed)" != "1" ]; do
     sleep 1
@@ -21,18 +18,34 @@ done
 MAGISKTMP="$(magisk --path)" || MAGISKTMP=/sbin
 MIRROR="$MAGISKTMP"/.magisk/mirror
 
-youtubeapkpath=$(pm path "$YOUTUBE_PACKAGE" \
-    | grep -E 'package:.*/base\.apk' \
-    | cut -d':' -f2)
+overlayPackage() {
+    local packagename="$1"
+    logi "Overlaying $packagename"
 
-[ -z "$youtubeapkpath" ] && \
-    youtubeapkpath=$(find -H \
-    "$MIRROR"/data/app \
-    -wholename "*${YOUTUBE_PACKAGE}*/base.apk")
+    overlayapk=$(pwd)/overlay/"$packagename".apk
 
-[ -z "$youtubeapkpath" ] && err "Couldn't locate YouTube base.apk"
+    apkpath=$(pm path "$packagename" \
+        | grep -E 'package:.*/base\.apk' \
+        | cut -d':' -f2)
 
-mount -o bind "$MIRROR"/"$REVANCEDAPK" "$youtubeapkpath" \
-    || err "Failed to mount $REVANCEDAPK on $youtubeapkpath"
+    [ -z "$apkpath" ] && \
+        apkpath=$(find -H \
+        "$MIRROR"/data/app \
+        -wholename "*${packagename}*/base.apk")
 
-am force-stop "$YOUTUBE_PACKAGE"
+    [ -z "$apkpath" ] \
+        && logi "Couldn't locate $packagename base.apk" \
+        && return 1
+
+    mount -o bind "$MIRROR"/"$overlayapk" "$apkpath" || {
+        logi "Failed to mount $overlayapk on $apkpath"
+        return 1
+    }
+
+    am force-stop "$packagename"
+}
+
+for packagename in overlay/*; do
+    packagename="$(basename "$packagename" | sed -e 's/\.apk$//')"
+    overlayPackage "$packagename"
+done

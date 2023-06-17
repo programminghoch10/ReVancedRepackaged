@@ -6,4 +6,6 @@
 magiskmodule/README.md
 magiskmodule/module.prop
 magiskmodule/version.sh
-magiskmodule/aapt2
+magiskmodule/aapt2lib
+magiskmodule/packageversions
+magiskmodule/supportedversions.md

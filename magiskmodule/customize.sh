@@ -9,66 +9,79 @@ cd "$MODPATH"
 [ ! -f ./version.sh ] && abort "Missing version.sh"
 source ./version.sh
 
-[ -z "$(pm list packages "$YOUTUBE_PACKAGE")" ] && {
-    ui_print "YouTube not found."
-    abort "Please install YouTube $YOUTUBE_VERSION manually before installing this module."
-}
-
-installedyoutubeversion="$(pm dump $YOUTUBE_PACKAGE | grep -E '^ *versionName=.*$' | cut -d'=' -f2)"
-
-[ "$installedyoutubeversion" != "$YOUTUBE_VERSION" ] && {
-    ui_print "YouTube version mismatch!"
-    ui_print "  Found:    $installedyoutubeversion"
-    ui_print "  Expected: $YOUTUBE_VERSION"
-    abort "Please install the correct YouTube version before installing this module."
-}
-ui_print "- Found YouTube $installedyoutubeversion"
-
-youtubeapkpath=$(pm path "$YOUTUBE_PACKAGE" | grep -E 'package:.*/base\.apk' | cut -d':' -f2)
-ui_print "- Found YouTube APK at $youtubeapkpath"
-
 MAGISKTMP="$(magisk --path)" || MAGISKTMP=/sbin
 MIRROR="$MAGISKTMP"/.magisk/mirror
 ui_print "- Found Magisk mirror at $MIRROR"
-youtubeapkpath="$MIRROR"/"$youtubeapkpath"
 
 ui_print "- Preparing Patching Process"
 
-cp -v wrapper.apk patches.jar integrations.apk "$TMPDIR"
+[ ! -f aapt2lib/$ARCH/libaapt2.so ] && abort "Failed to locate libaapt2.so for $ARCH"
+mv -v aapt2lib/$ARCH/libaapt2.so aapt2
+rm -r aapt2lib
+chmod -v +x aapt2
 
-[ ! -f aapt2/$ARCH/libaapt2.so ] && abort "Failed to locate libaapt2.so for $ARCH"
-cp -v aapt2/$ARCH/libaapt2.so "$TMPDIR"/aapt2
-chmod -v +x "$TMPDIR"/aapt2
+chmod -v +x system/bin/revancedcli
 
-cd "$TMPDIR"
-ui_print "   TMPDIR=$TMPDIR"
+mkdir overlay
 
-ui_print "   Increase Heap Growth limit from $(getprop dalvik.vm.heapgrowthlimit) to 4096m"
-resetprop dalvik.vm.heapgrowthlimit 4096m
+processPackage() {
+    local packagename="$1"
 
-ui_print "- Patching YouTube APK"
+    [ -z "$(pm list packages "$packagename")" ] && {
+        #ui_print "- $packagename not found"
+        return
+    }
 
-app_process \
-    -cp wrapper.apk \
-    $(pwd) \
-    com.programminghoch10.revancedandroidcli.MainCommand \
-    -a "$youtubeapkpath" \
-    -c \
-    -o revanced.apk \
-    -b patches.jar \
-    -m integrations.apk \
-    -e vanced-microg-support \
-    --custom-aapt2-binary=$(pwd)/aapt2 \
-2>&1 || abort "Patching failed! $?"
+    ui_print "- Processing $packagename"
 
-[ ! -f revanced.apk ] && abort "Patching failed!"
+    installedpackageversion="$(pm dump $packagename | grep -E '^ *versionName=.*$' | cut -d'=' -f2)"
 
-mv -v revanced.apk "$MODPATH"/revanced.apk
-rm aapt2
+    grep -q -F "$installedpackageversion" < packageversions/"$packagename" || {
+        ui_print "- $packagename $installedpackageversion is not supported."
+        return
+    }
 
-cd "$MODPATH"
+    ui_print "- Found $packagename $installedpackageversion"
 
-chcon u:object_r:apk_data_file:s0 revanced.apk
+    apkpath=$(pm path "$packagename" | grep -E 'package:.*/base\.apk' | cut -d':' -f2)
+    ui_print "- Found YouTube APK at $apkpath"
 
-rm wrapper.apk integrations.apk patches.jar
-rm -r aapt2
+    apkpath="$MIRROR"/"$apkpath"
+
+    patchAPK "$packagename" "$apkpath"
+    
+    [ ! -f overlay/"$packagename".apk ] && abort "Couldn't locate patched file!"
+
+    chcon u:object_r:apk_data_file:s0 overlay/"$packagename".apk
+}
+
+patchAPK() {
+    local packagename="$1"
+    local apkpath="$2"
+    cd "$TMPDIR"
+
+    ui_print "- Patching $packagename"
+
+    export MODPATH
+    "$MODPATH"/system/bin/revancedcli \
+        -a "$apkpath" \
+        -c \
+        -o out.apk \
+        -b "$MODPATH"/patches.jar \
+        -m "$MODPATH"/integrations.apk \
+        -e vanced-microg-support \
+    2>&1 || abort "Patching failed! $?"
+
+    [ ! -f out.apk ] && abort "Patching failed!"
+
+    mv -v out.apk "$MODPATH"/overlay/"$packagename".apk
+
+    cd "$MODPATH"
+}
+
+for packagename in packageversions/*; do
+    packagename="$(basename "$packagename")"
+    processPackage "$packagename"
+done
+
+[ -z "$(ls overlay)" ] && abort "No compatible packages have been found."
