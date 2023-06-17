@@ -60,7 +60,7 @@ PATCHES_LIST=$(java -jar revanced-cli.jar \
     --with-versions \
     --with-packages \
 | sed 's/^INFORMATION: \s*//')
-rm -r magiskmodule/packageversions
+rm -rf magiskmodule/packageversions
 mkdir magiskmodule/packageversions
 echo '## Supported Packages and Versions' > magiskmodule/supportedversions.md
 for package in $(cut -d$'\t' -f1 <<< "$PATCHES_LIST" | sort -u); do
