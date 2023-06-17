@@ -27,6 +27,11 @@ ui_print "- Found YouTube $installedyoutubeversion"
 youtubeapkpath=$(pm path "$YOUTUBE_PACKAGE" | grep -E 'package:.*/base\.apk' | cut -d':' -f2)
 ui_print "- Found YouTube APK at $youtubeapkpath"
 
+MAGISKTMP="$(magisk --path)" || MAGISKTMP=/sbin
+MIRROR="$MAGISKTMP"/.magisk/mirror
+ui_print "- Found Magisk mirror at $MIRROR"
+youtubeapkpath="$MIRROR"/"$youtubeapkpath"
+
 ui_print "- Preparing Patching Process"
 
 cp -v wrapper.apk patches.jar integrations.apk "$TMPDIR"
