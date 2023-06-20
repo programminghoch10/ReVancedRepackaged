@@ -1,10 +1,13 @@
 # ReVancedRepackaged
 
-**ReVanced, but patched locally.**
+**[ReVanced](https://github.com/revanced), 
+but patched locally.**
 
 This magisk module 
-contains only the ReVanced Patcher.
-It will patch the installed YouTube app 
+contains only the 
+[ReVanced Patcher](https://github.com/revanced/revanced-cli).
+It will patch 
+[any installed ReVanced compatible app](https://github.com/revanced/revanced-patches) 
 right on your device during installation.
 
 [![GitHub Latest Release (by date)](https://img.shields.io/github/v/release/programminghoch10/ReVancedRepackaged?label=latest&logo=github&display_name=release)](https://github.com/programminghoch10/ReVancedRepackaged/releases/latest)
@@ -38,11 +41,27 @@ but is allowed to distribute a patcher,
 which the user can download to patch their geniune Windows ISO.
 
 The same concept can be applied to ReVanced.  
-Redistributing magisk modules with the patched YouTube APK is not legal.
+Redistributing magisk modules with patched APKs is not legal.
 But we are totally fine distributing the patcher 
 and letting the user patch the original APK on his own.
 
 This module automates exactly this.
-You, the user, download the original YouTube APK yourself.
-This module will patch the installed YouTube APK during installation
+You, the user, download the original apps yourself.
+This module will patch the installed apps during installation
 **right on your device**.
+
+## Issues and Support
+
+You are welcome to 
+[report issues](https://github.com/programminghoch10/ReVancedRepackaged/issues) 
+and 
+[ask questions](https://github.com/programminghoch10/ReVancedRepackaged/discussions) 
+anytime.
+
+Please ensure to only report bugs that belong here,
+generic problems should be raised at 
+[ReVanced](https://github.com/revanced)
+directly.
+
+Please provide as much information as possible rightaway
+to save time of everybody investigating your issue.
