@@ -1,0 +1,24 @@
+From 1ebe926d3d18aeffdd0375d8b3884ca02ba845c6 Mon Sep 17 00:00:00 2001
+From: programminghoch10 <16062290+programminghoch10@users.noreply.github.com>
+Date: Tue, 20 Jun 2023 17:41:43 +0200
+Subject: [PATCH] Remove JVM 11 requirement
+
+---
+ build.gradle.kts | 1 -
+ 1 file changed, 1 deletion(-)
+
+diff --git a/build.gradle.kts b/build.gradle.kts
+index 2d66c99..1f91e48 100644
+--- a/build.gradle.kts
++++ b/build.gradle.kts
+@@ -35,7 +35,6 @@ dependencies {
+ }
+ 
+ kotlin {
+-    jvmToolchain(11)
+ }
+ 
+ tasks {
+-- 
+2.40.1
+
