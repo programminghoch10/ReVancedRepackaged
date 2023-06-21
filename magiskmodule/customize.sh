@@ -70,6 +70,7 @@ patchAPK() {
         -b "$MODPATH"/patches.jar \
         -m "$MODPATH"/integrations.apk \
         -e vanced-microg-support \
+        -e music-microg-support \
     2>&1 || abort "Patching failed! $?"
 
     [ ! -f out.apk ] && abort "Patching failed!"
