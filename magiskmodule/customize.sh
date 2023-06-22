@@ -36,7 +36,9 @@ processPackage() {
 
     installedpackageversion="$(pm dump $packagename | grep -E '^ *versionName=.*$' | cut -d'=' -f2)"
 
-    grep -q -F "$installedpackageversion" < packageversions/"$packagename" || {
+    [ -s packageversions/"$packagename" ] \
+    && ! grep -q -F "$installedpackageversion" < packageversions/"$packagename" \
+    && {
         ui_print "- $packagename $installedpackageversion is not supported."
         return
     }
@@ -44,7 +46,7 @@ processPackage() {
     ui_print "- Found $packagename $installedpackageversion"
 
     apkpath=$(pm path "$packagename" | grep -E 'package:.*/base\.apk' | cut -d':' -f2)
-    ui_print "- Found YouTube APK at $apkpath"
+    ui_print "- Found APK at $apkpath"
 
     apkpath="$MIRROR"/"$apkpath"
 
