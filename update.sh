@@ -31,6 +31,7 @@ if [ "$REVANCED_CLI" != "$REVANCED_CLI_TAG" ]; then
     (
         git submodule update --checkout
         cd revanced-cli
+        git fetch --all --quiet
         git checkout "$REVANCED_CLI_TAG"
     )
     sed -i "s/^REVANCED_CLI=.*$/REVANCED_CLI=\"$REVANCED_CLI_TAG\"/" version.sh
@@ -38,3 +39,13 @@ if [ "$REVANCED_CLI" != "$REVANCED_CLI_TAG" ]; then
 else
     echo "No update for REVANCED_CLI $REVANCED_CLI found"
 fi
+
+echo
+source version.sh
+cat <<EOF
+update ReVanced
+
+* revanced-cli \`$REVANCED_CLI\`
+* revanced-patches \`$REVANCED_PATCHES\`
+* revanced-integrations \`$REVANCED_INTEGRATIONS\`
+EOF
