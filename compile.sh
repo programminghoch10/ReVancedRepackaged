@@ -30,7 +30,7 @@ executeGradle() {
 (
     cd revanced-cli
     for patch in $(ls ../revanced-cli-patches/*.patch); do
-        git am "$patch"
+        git am --no-3way "$patch"
     done
 )
 
