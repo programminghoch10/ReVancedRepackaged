@@ -7,7 +7,7 @@ This magisk module
 contains only the 
 [ReVanced Patcher](https://github.com/revanced/revanced-cli).
 It will patch 
-[any installed ReVanced compatible app](https://github.com/revanced/revanced-patches) 
+[any installed ReVanced compatible app](https://revanced.app/patches) 
 right on your device during installation.
 
 [![GitHub Latest Release (by date)](https://img.shields.io/github/v/release/programminghoch10/ReVancedRepackaged?label=latest&logo=github&display_name=release)](https://github.com/programminghoch10/ReVancedRepackaged/releases/latest)
