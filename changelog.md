@@ -1,2 +1,2 @@
-* revanced-patches `v2.186.0`
-* revanced-integrations `v0.114.0`
+* revanced-patches `v2.187.0`
+* revanced-integrations `v0.115.0`
