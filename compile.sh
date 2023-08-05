@@ -14,6 +14,7 @@ REVANCED_INTEGRATIONS_URL="https://github.com/revanced/revanced-integrations/rel
 REVANCED_PATCHES_URL="https://github.com/revanced/revanced-patches/releases/download/v%s/revanced-patches-%s.jar"
 
 git submodule update --checkout
+git clean -fdx magiskmodule/
 
 executeGradle() {
     (
