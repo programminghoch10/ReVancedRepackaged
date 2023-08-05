@@ -18,6 +18,15 @@ done
 MAGISKTMP="$(magisk --path)" || MAGISKTMP=/sbin
 MIRROR="$MAGISKTMP"/.magisk/mirror
 
+checkHash() {
+    local packagename="$1"
+    local apkpath="$2"
+    [ "$(sha256sum < "$apkpath")" = "$(cat overlay/"$packagename".sha256sum)" ] && return 0
+    logi "Package $package has changed their base.apk! Removing their overlay, because a repatch is required."
+    rm overlay/"$packagename".*
+    return 1
+}
+
 overlayPackage() {
     local packagename="$1"
     logi "Overlaying $packagename"
@@ -37,6 +46,8 @@ overlayPackage() {
         && logi "Couldn't locate $packagename base.apk" \
         && return 1
 
+    checkHash "$packagename" "$apkpath" || return 1
+
     mount -o bind "$MIRROR"/"$overlayapk" "$apkpath" || {
         logi "Failed to mount $overlayapk on $apkpath"
         return 1
@@ -45,7 +56,7 @@ overlayPackage() {
     am force-stop "$packagename"
 }
 
-for packagename in overlay/*; do
+for packagename in overlay/*.apk; do
     packagename="$(basename "$packagename" | sed -e 's/\.apk$//')"
     overlayPackage "$packagename"
 done

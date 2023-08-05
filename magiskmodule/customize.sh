@@ -53,6 +53,7 @@ processPackage() {
     patchAPK "$packagename" "$apkpath"
     
     [ ! -f overlay/"$packagename".apk ] && abort "Couldn't locate patched file!"
+    sha256sum < "$apkpath" > overlay/"$packagename".sha256sum
 
     chcon u:object_r:apk_data_file:s0 overlay/"$packagename".apk
 }
