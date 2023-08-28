@@ -23,6 +23,13 @@ dependencyResolutionManagement {
                 password = githubPassword
             }
         }
+        maven {
+            url = uri("https://maven.pkg.github.com/revanced/jadb")
+            credentials {
+                username = githubUsername
+                password = githubPassword
+            }
+        }
         maven { url = uri("https://jitpack.io") }
     }
 }

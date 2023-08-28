@@ -55,17 +55,14 @@ REVANCED_CLI=$(sed -e 's/^v//' <<< "$REVANCED_CLI")
 ln -v -s -f "revanced-cli/build/libs/revancedcli-$REVANCED_CLI-all.jar" "revanced-cli.jar"
 
 PATCHES_LIST=$(java -jar revanced-cli.jar \
-    -b "$(basename "$REVANCED_PATCHES_DL")" \
-    -a dummy.apk \
-    --list \
-    --with-versions \
-    --with-packages \
+    list-packages \
+    "$(basename "$REVANCED_PATCHES_DL")" \
 | sed 's/^INFORMATION: \s*//')
 rm -rf magiskmodule/packageversions
 mkdir magiskmodule/packageversions
 echo '## Supported Packages and Versions' > magiskmodule/supportedversions.md
 for package in $(cut -d$'\t' -f1 <<< "$PATCHES_LIST" | sort -u); do
-    cut -d$'\t' -f1,4 <<< "$PATCHES_LIST" | grep "^$package" | cut -d$'\t' -f2 | tr ',' '\n' | sed -e 's/^ //' -e 's/ $//' -e '/^$/d' | sort -u > magiskmodule/packageversions/"$package"
+    grep "^$package" <<< "$PATCHES_LIST" | cut -d$'\t' -f2 | tr ',' '\n' | sed -e 's/^ //' -e 's/ $//' -e '/^$/d' | sort -u > magiskmodule/packageversions/"$package"
     echo "- **\`$package\`**" >> magiskmodule/supportedversions.md
     sed 's/^\(.*\)$/`\1`/' < magiskmodule/packageversions/"$package" | tr '\n' '#' | sed -e '/^$/d' -e 's/#$//' -e 's/#/\n/g' | sed -e 's/^/  - /' >> magiskmodule/supportedversions.md
     [ $(wc -l < magiskmodule/packageversions/"$package") -gt 0 ] && echo >> magiskmodule/supportedversions.md

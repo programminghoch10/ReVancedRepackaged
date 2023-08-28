@@ -1,7 +1,7 @@
 package com.programminghoch10.revancedandroidcli;
 
 import java.lang.reflect.Method;
-import app.revanced.cli.main.MainKt;
+import app.revanced.cli.command.MainCommandKt;
 
 public class MainCommand{
     public static void main(String[] args) {
@@ -13,10 +13,8 @@ public class MainCommand{
         try {
             System.err.println("property");
             System.setProperty("java.io.tmpdir", "/data/local/tmp");
-            System.err.println("class");
-            Method main = MainKt.class.getMethod("main", String[].class);
             System.err.println("invoke");
-            main.invoke(null, (Object) args);
+            MainCommandKt.main(args);
             System.err.println("end");
             System.exit(0);
         } catch (Exception e) {

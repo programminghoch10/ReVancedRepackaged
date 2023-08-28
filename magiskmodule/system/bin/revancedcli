@@ -6,9 +6,21 @@ echo "modpath = $MODPATH" >&2
 #echo "   Increase Heap Growth limit from $(getprop dalvik.vm.heapgrowthlimit) to 4096m" >&2
 resetprop dalvik.vm.heapgrowthlimit 4096m
 
-app_process \
-    -cp "$MODPATH"/revancedandroidcli.apk \
-    $(pwd) \
-    com.programminghoch10.revancedandroidcli.MainCommand \
-    --custom-aapt2-binary="$MODPATH"/aapt2 \
-    "$@"
+invoke() {
+    app_process \
+        -cp "$MODPATH"/revancedandroidcli.apk \
+        $(pwd) \
+        com.programminghoch10.revancedandroidcli.MainCommand \
+        "$@"
+}
+
+[ "$1" = "patch" ] && {
+    shift
+    invoke \
+        patch \
+        --custom-aapt2-binary="$MODPATH"/aapt2 \
+        "$@"
+    exit
+}
+
+invoke "$@"
