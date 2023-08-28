@@ -67,13 +67,14 @@ patchAPK() {
 
     export MODPATH
     "$MODPATH"/system/bin/revancedcli \
-        -a "$apkpath" \
-        -c \
-        -o out.apk \
-        -b "$MODPATH"/patches.jar \
-        -m "$MODPATH"/integrations.apk \
-        -e vanced-microg-support \
-        -e music-microg-support \
+        patch \
+        --patch-bundle="$MODPATH"/patches.jar \
+        --merge="$MODPATH"/integrations.apk \
+        --out=out.apk \
+        --exclude='vanced-microg-support' \
+        --exclude='music-microg-support' \
+        --purge \
+        "$apkpath" \
     2>&1 || abort "Patching failed! $?"
 
     [ ! -f out.apk ] && abort "Patching failed!"
