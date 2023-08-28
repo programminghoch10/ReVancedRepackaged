@@ -1,0 +1,31 @@
+From 90a910ed61cb037da8a733948a6a13c624c21362 Mon Sep 17 00:00:00 2001
+From: programminghoch10 <16062290+programminghoch10@users.noreply.github.com>
+Date: Mon, 28 Aug 2023 11:25:11 +0200
+Subject: [PATCH] Load classes in dex mode
+
+Required for patching on android
+---
+ src/main/kotlin/app/revanced/cli/command/PatchCommand.kt | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/src/main/kotlin/app/revanced/cli/command/PatchCommand.kt b/src/main/kotlin/app/revanced/cli/command/PatchCommand.kt
+index 4bc2641..e3c0588 100644
+--- a/src/main/kotlin/app/revanced/cli/command/PatchCommand.kt
++++ b/src/main/kotlin/app/revanced/cli/command/PatchCommand.kt
+@@ -154,7 +154,12 @@ internal object PatchCommand : Runnable {
+ 
+         logger.info("Loading patches")
+ 
+-        val patches = PatchBundleLoader.Jar(*patchBundles.toTypedArray())
++        val patches = try {
++            val DexClassLoaderClass = Class.forName("dalvik.system.DexClassLoader")
++            PatchBundleLoader.Dex(*patchBundles.toTypedArray())
++        } catch (_: ClassNotFoundException) {
++            PatchBundleLoader.Jar(*patchBundles.toTypedArray())
++        }
+         val integrations = integrations
+ 
+         logger.info("Setting patch options")
+-- 
+2.40.1
+
