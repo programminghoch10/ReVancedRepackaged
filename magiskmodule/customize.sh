@@ -71,8 +71,7 @@ patchAPK() {
         --patch-bundle="$MODPATH"/patches.jar \
         --merge="$MODPATH"/integrations.apk \
         --out=out.apk \
-        --exclude='vanced-microg-support' \
-        --exclude='music-microg-support' \
+        --exclude='Vanced MicroG support' \
         --purge \
         "$apkpath" \
     2>&1 || abort "Patching failed! $?"

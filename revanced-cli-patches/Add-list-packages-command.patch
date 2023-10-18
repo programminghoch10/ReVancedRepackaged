@@ -1,4 +1,4 @@
-From d822999c8c6326e5060281b73417b3fd37a6ceaf Mon Sep 17 00:00:00 2001
+From 4d43c0840e27a2d9bca99166fee874c91d0d8d62 Mon Sep 17 00:00:00 2001
 From: programminghoch10 <16062290+programminghoch10@users.noreply.github.com>
 Date: Mon, 28 Aug 2023 13:02:03 +0200
 Subject: [PATCH] Add list packages command
@@ -14,11 +14,10 @@ new file mode 100644
 index 0000000..66a5a05
 --- /dev/null
 +++ b/src/main/kotlin/app/revanced/cli/command/ListPackagesCommand.kt
-@@ -0,0 +1,38 @@
+@@ -0,0 +1,37 @@
 +package app.revanced.cli.command
 +
 +import app.revanced.patcher.PatchBundleLoader
-+import app.revanced.patcher.extensions.PatchExtensions.compatiblePackages
 +import picocli.CommandLine.Command
 +import picocli.CommandLine.Parameters
 +import java.io.File
@@ -44,7 +43,7 @@ index 0000000..66a5a05
 +            .forEach {
 +                if (!supportedVersions.containsKey(it.name))
 +                    supportedVersions[it.name] = HashSet()
-+                supportedVersions[it.name]!!.addAll(it.versions)
++                it.versions?.let { versions -> supportedVersions[it.name]!!.addAll(versions) }
 +            }
 +        logger.info(
 +            supportedVersions.keys.joinToString("\n") {
@@ -55,10 +54,10 @@ index 0000000..66a5a05
 +}
 \ No newline at end of file
 diff --git a/src/main/kotlin/app/revanced/cli/command/MainCommand.kt b/src/main/kotlin/app/revanced/cli/command/MainCommand.kt
-index 99ac1b1..5e4c541 100644
+index 5dd7f8d..f923d39 100644
 --- a/src/main/kotlin/app/revanced/cli/command/MainCommand.kt
 +++ b/src/main/kotlin/app/revanced/cli/command/MainCommand.kt
-@@ -59,6 +59,7 @@ private object CLIVersionProvider : IVersionProvider {
+@@ -31,6 +31,7 @@ private object CLIVersionProvider : IVersionProvider {
      versionProvider = CLIVersionProvider::class,
      subcommands = [
          ListPatchesCommand::class,

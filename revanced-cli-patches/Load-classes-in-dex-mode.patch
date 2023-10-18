@@ -1,4 +1,4 @@
-From 90a910ed61cb037da8a733948a6a13c624c21362 Mon Sep 17 00:00:00 2001
+From 8cf13ce458cb9560a7b29cb5df2f3c49d53f5172 Mon Sep 17 00:00:00 2001
 From: programminghoch10 <16062290+programminghoch10@users.noreply.github.com>
 Date: Mon, 28 Aug 2023 11:25:11 +0200
 Subject: [PATCH] Load classes in dex mode
@@ -9,10 +9,10 @@ Required for patching on android
  1 file changed, 6 insertions(+), 1 deletion(-)
 
 diff --git a/src/main/kotlin/app/revanced/cli/command/PatchCommand.kt b/src/main/kotlin/app/revanced/cli/command/PatchCommand.kt
-index 4bc2641..e3c0588 100644
+index 8781136..f5ab38b 100644
 --- a/src/main/kotlin/app/revanced/cli/command/PatchCommand.kt
 +++ b/src/main/kotlin/app/revanced/cli/command/PatchCommand.kt
-@@ -154,7 +154,12 @@ internal object PatchCommand : Runnable {
+@@ -184,7 +184,12 @@ internal object PatchCommand : Runnable {
  
          logger.info("Loading patches")
  
@@ -23,9 +23,9 @@ index 4bc2641..e3c0588 100644
 +        } catch (_: ClassNotFoundException) {
 +            PatchBundleLoader.Jar(*patchBundles.toTypedArray())
 +        }
-         val integrations = integrations
  
-         logger.info("Setting patch options")
+         // Warn if a patch can not be found in the supplied patch bundles.
+         if (warn) patches.map { it.name }.toHashSet().let { availableNames ->
 -- 
 2.40.1
 
