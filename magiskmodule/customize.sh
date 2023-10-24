@@ -27,10 +27,7 @@ mkdir overlay
 processPackage() {
     local packagename="$1"
 
-    [ -z "$(pm list packages "$packagename")" ] && {
-        #ui_print "- $packagename not found"
-        return
-    }
+    [ -z "$(pm list packages "$packagename")" ] && return
 
     ui_print "- Processing $packagename"
 
@@ -38,14 +35,17 @@ processPackage() {
 
     [ -s packageversions/"$packagename" ] \
     && ! grep -q -F "$installedpackageversion" < packageversions/"$packagename" \
-    && {
-        ui_print "- $packagename $installedpackageversion is not supported."
-        return
-    }
+    && ui_print "- $packagename $installedpackageversion is not supported." \
+    && return
 
     ui_print "- Found $packagename $installedpackageversion"
 
     apkpath=$(pm path "$packagename" | grep -E 'package:.*/base\.apk' | cut -d':' -f2)
+
+    [ ! -f "$apkpath" ] \
+    && ui_print "  $apkpath provided by package manager doesn't exist!" \
+    && return
+
     ui_print "- Found APK at $apkpath"
 
     apkpath="$MIRROR"/"$apkpath"
