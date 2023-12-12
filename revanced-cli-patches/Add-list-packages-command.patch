@@ -1,17 +1,17 @@
-From 4d43c0840e27a2d9bca99166fee874c91d0d8d62 Mon Sep 17 00:00:00 2001
+From 3f81a5fc02129d13a873fbcdb43ab665a234a821 Mon Sep 17 00:00:00 2001
 From: programminghoch10 <16062290+programminghoch10@users.noreply.github.com>
 Date: Mon, 28 Aug 2023 13:02:03 +0200
 Subject: [PATCH] Add list packages command
 
 ---
- .../cli/command/ListPackagesCommand.kt        | 38 +++++++++++++++++++
+ .../cli/command/ListPackagesCommand.kt        | 37 +++++++++++++++++++
  .../app/revanced/cli/command/MainCommand.kt   |  1 +
- 2 files changed, 39 insertions(+)
+ 2 files changed, 38 insertions(+)
  create mode 100644 src/main/kotlin/app/revanced/cli/command/ListPackagesCommand.kt
 
 diff --git a/src/main/kotlin/app/revanced/cli/command/ListPackagesCommand.kt b/src/main/kotlin/app/revanced/cli/command/ListPackagesCommand.kt
 new file mode 100644
-index 0000000..66a5a05
+index 0000000..2b5477f
 --- /dev/null
 +++ b/src/main/kotlin/app/revanced/cli/command/ListPackagesCommand.kt
 @@ -0,0 +1,37 @@
@@ -54,17 +54,17 @@ index 0000000..66a5a05
 +}
 \ No newline at end of file
 diff --git a/src/main/kotlin/app/revanced/cli/command/MainCommand.kt b/src/main/kotlin/app/revanced/cli/command/MainCommand.kt
-index 5dd7f8d..f923d39 100644
+index 4d33a4d..eb754a2 100644
 --- a/src/main/kotlin/app/revanced/cli/command/MainCommand.kt
 +++ b/src/main/kotlin/app/revanced/cli/command/MainCommand.kt
-@@ -31,6 +31,7 @@ private object CLIVersionProvider : IVersionProvider {
-     versionProvider = CLIVersionProvider::class,
-     subcommands = [
-         ListPatchesCommand::class,
-+        ListPackagesCommand::class,
+@@ -36,6 +36,7 @@ private object CLIVersionProvider : IVersionProvider {
          PatchCommand::class,
          OptionsCommand::class,
+         ListPatchesCommand::class,
++        ListPackagesCommand::class,
+         ListCompatibleVersions::class,
          UtilityCommand::class,
+     ],
 -- 
-2.40.1
+2.43.0
 

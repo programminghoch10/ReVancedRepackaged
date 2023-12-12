@@ -71,7 +71,7 @@ patchAPK() {
         --patch-bundle="$MODPATH"/patches.jar \
         --merge="$MODPATH"/integrations.apk \
         --out=out.apk \
-        --exclude='Vanced MicroG support' \
+        --exclude='GmsCore support' \
         --purge \
         "$apkpath" \
     2>&1 || abort "Patching failed! $?"
