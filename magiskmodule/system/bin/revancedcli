@@ -1,7 +1,7 @@
 #!/system/bin/sh
 
 [ -z "$MODPATH" ] && MODPATH=/data/adb/modules/revancedrepackaged
-echo "modpath = $MODPATH" >&2
+#echo "modpath = $MODPATH" >&2
 
 HEAPLIMIT="$(getprop dalvik.vm.heapgrowthlimit)"
 setHeapLimit() {
@@ -15,7 +15,7 @@ trap setHeapLimit EXIT
 invoke() {
     app_process \
         -cp "$MODPATH"/revancedandroidcli.apk \
-        $(pwd) \
+        "$(pwd)" \
         com.programminghoch10.revancedandroidcli.MainCommand \
         "$@"
 }
