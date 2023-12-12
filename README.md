@@ -50,6 +50,14 @@ You, the user, download the original apps yourself.
 This module will patch the installed apps during installation
 **right on your device**.
 
+## Blacklisting packages
+
+All compatible apps installed on the device are patched by default.
+
+If you want to exclude certain apps from being patched,
+add their packagename into a file called `revancedrepackaged-blacklist.txt`
+and place it into `/sdcard` or `/data/adb`.
+
 ## Issues and Support
 
 You are welcome to 

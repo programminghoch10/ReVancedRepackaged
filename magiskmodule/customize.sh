@@ -13,6 +13,15 @@ MAGISKTMP="$(magisk --path)" || MAGISKTMP=/sbin
 MIRROR="$MAGISKTMP"/.magisk/mirror
 ui_print "- Found Magisk mirror at $MIRROR"
 
+findConfigFile() {
+    for path in /storage/emulated/0 /data/adb; do
+        [ -f "$path/$1" ] && echo "$path/$1" && break
+    done
+}
+
+BLACKLIST="$(findConfigFile revancedrepackaged-blacklist.txt)"
+[ -n "$BLACKLIST" ] && ui_print "- Found blacklist at $BLACKLIST"
+
 ui_print "- Preparing Patching Process"
 
 [ ! -f aapt2lib/$ARCH/libaapt2.so ] && abort "Failed to locate libaapt2.so for $ARCH"
@@ -28,6 +37,10 @@ processPackage() {
     local packagename="$1"
 
     [ -z "$(pm list packages "$packagename")" ] && return
+
+    grep -q -F "$packagename" < "$BLACKLIST" \
+    && ui_print "- Skipping $packagename (blacklisted)" \
+    && return
 
     ui_print "- Processing $packagename"
 
