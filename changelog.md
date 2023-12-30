@@ -1,7 +1,7 @@
-* revanced-cli `v4.3.0`
-* revanced-patches `v3.0.1`
-* revanced-integrations `v1.0.0`
-* bump targetSdk to `34`
-* reset dalvikvm heapgrowthlimit after execution
-* decrease logging
-* add possiblilty to blacklist packages
+* revanced-cli `v4.4.0`
+* revanced-patches `v3.2.0`
+* revanced-integrations `v1.1.0`
+* add possibility to supply `options.json` for patching
+* add default patch options
+* introduce branding icon for YouTube
+* add shellcheck
