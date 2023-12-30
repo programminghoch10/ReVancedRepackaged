@@ -1,24 +1,36 @@
-# ReVancedRepackaged
 
-**[ReVanced](https://github.com/revanced), 
-but patched locally.**
+<div align=center>
+   <h1>ReVancedRepackaged</h1>
+   <img src=logo/logo_standalone.svg width=25%>
+   <br>
+   <b>
+      <a href=https://github.com/revanced>ReVanced</a>, 
+      but patched locally.
+   </b>
+   <br>
+   <br>
+   <div>
+      <a href="https://github.com/programminghoch10/ReVancedRepackaged/releases/latest"><img src="https://img.shields.io/github/v/release/programminghoch10/ReVancedRepackaged?label=latest&logo=github&display_name=release" alt="GitHub Latest Release (by date)"></a>
+      <a href="https://github.com/programminghoch10/ReVancedRepackaged/releases/latest"><img src="https://img.shields.io/github/release-date/programminghoch10/ReVancedRepackaged?logo=github" alt="GitHub Latest Release Date"></a>
+      <br>
+      <a href="https://github.com/programminghoch10/ReVancedRepackaged/releases"><img src="https://img.shields.io/github/downloads/programminghoch10/ReVancedRepackaged/total?logo=github" alt="GitHub Global Download Counter"></a>
+      <a href="https://github.com/programminghoch10/ReVancedRepackaged/releases/latest"><img src="https://img.shields.io/github/downloads/programminghoch10/ReVancedRepackaged/latest/total?logo=github" alt="GitHub Latest Download Counter"></a>
+      <br>
+      <a href="https://github.com/programminghoch10/ReVancedRepackaged/stargazers"><img src="https://img.shields.io/github/stars/programminghoch10/ReVancedRepackaged?style=social" alt="GitHub Repo stars"></a>
+      <a href="https://github.com/programminghoch10"><img src="https://img.shields.io/github/followers/programminghoch10?style=social" alt="GitHub followers"></a>
+   </div>
+</div>
 
 This magisk module 
 contains only the 
-[ReVanced Patcher](https://github.com/revanced/revanced-cli).
+[ReVanced Patcher](https://github.com/revanced/revanced-cli). \
 It will patch 
 [any installed ReVanced compatible app](https://revanced.app/patches) 
 right on your device during installation.
 
-[![GitHub Latest Release (by date)](https://img.shields.io/github/v/release/programminghoch10/ReVancedRepackaged?label=latest&logo=github&display_name=release)](https://github.com/programminghoch10/ReVancedRepackaged/releases/latest)
-[![GitHub Latest Release Date](https://img.shields.io/github/release-date/programminghoch10/ReVancedRepackaged?logo=github)](https://github.com/programminghoch10/ReVancedRepackaged/releases/latest) \
-[![GitHub Global Download Counter](https://img.shields.io/github/downloads/programminghoch10/ReVancedRepackaged/total?logo=github)](https://github.com/programminghoch10/ReVancedRepackaged/releases)
-[![GitHub Latest Download Counter](https://img.shields.io/github/downloads/programminghoch10/ReVancedRepackaged/latest/total?logo=github)](https://github.com/programminghoch10/ReVancedRepackaged/releases/latest) \
-[![GitHub Workflow Status](https://img.shields.io/github/actions/workflow/status/programminghoch10/ReVancedRepackaged/build.yml?logo=github%20actions&logoColor=white)](https://github.com/programminghoch10/ReVancedRepackaged/actions/workflows/build.yml)
-[![GitHub commits since last release](https://img.shields.io/github/commits-since/programminghoch10/ReVancedRepackaged/latest?logo=git&logoColor=white)](https://github.com/programminghoch10/ReVancedRepackaged/compare/)
-[![GitHub last commit](https://img.shields.io/github/last-commit/programminghoch10/ReVancedRepackaged?logo=git&logoColor=white)](https://github.com/programminghoch10/ReVancedRepackaged/commits/main) \
-[![GitHub Repo stars](https://img.shields.io/github/stars/programminghoch10/ReVancedRepackaged?style=social)](https://github.com/programminghoch10/ReVancedRepackaged/stargazers) \
-[![GitHub followers](https://img.shields.io/github/followers/programminghoch10?style=social)](https://github.com/programminghoch10)
+<a href="https://github.com/programminghoch10/ReVancedRepackaged/actions/workflows/build.yml"><img src="https://img.shields.io/github/actions/workflow/status/programminghoch10/ReVancedRepackaged/build.yml?logo=github%20actions&logoColor=white" alt="GitHub Workflow Status"></a>
+<a href="https://github.com/programminghoch10/ReVancedRepackaged/commits/main"><img src="https://img.shields.io/github/last-commit/programminghoch10/ReVancedRepackaged?logo=git&logoColor=white" alt="GitHub last commit"></a>
+<a href="https://github.com/programminghoch10/ReVancedRepackaged/compare/"><img src="https://img.shields.io/github/commits-since/programminghoch10/ReVancedRepackaged/latest?logo=git&logoColor=white" alt="GitHub commits since last release"></a>
 
 ## Installation
 

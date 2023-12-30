@@ -88,6 +88,8 @@ patchAPK() {
     [ -f "$optionsconfigfile" ] \
         && cp "$optionsconfigfile" options.json
 
+    sed -i "s|\$MODPATH|$MODPATH|g" options.json
+
     export MODPATH
     "$MODPATH"/system/bin/revancedcli \
         patch \
@@ -95,6 +97,7 @@ patchAPK() {
         --merge="$MODPATH"/integrations.apk \
         --out=out.apk \
         --exclude='GmsCore support' \
+        --include='Custom branding' \
         --options=options.json \
         --purge \
         "$apkpath" \
