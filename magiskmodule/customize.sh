@@ -80,6 +80,9 @@ patchAPK() {
     
     cp "$MODPATH"/options.json options.json
 
+    [ -f "$MODPATH"/options/"$packagename".json ] \
+        && cp "$MODPATH"/options/"$packagename".json options.json
+    
     local optionsconfigfile=""
     optionsconfigfile="$(findConfigFile revancedrepackaged-options.json)"
     [ -f "$optionsconfigfile" ] \
