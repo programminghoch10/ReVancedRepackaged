@@ -28,7 +28,9 @@ It will patch
 [any installed ReVanced compatible app](https://revanced.app/patches) 
 right on your device during installation.
 
-<a href="https://github.com/programminghoch10/ReVancedRepackaged/actions/workflows/build.yml"><img src="https://img.shields.io/github/actions/workflow/status/programminghoch10/ReVancedRepackaged/build.yml?logo=github%20actions&logoColor=white" alt="GitHub Workflow Status"></a>
+<a href="https://github.com/programminghoch10/ReVancedRepackaged/actions/workflows/build.yml"><img src="https://img.shields.io/github/actions/workflow/status/programminghoch10/ReVancedRepackaged/build.yml?logo=github%20actions&logoColor=white" alt="GitHub Workflow Build Status"></a>
+<a href="https://github.com/programminghoch10/ReVancedRepackaged/actions/workflows/shellcheck.yml"><img src="https://img.shields.io/github/actions/workflow/status/programminghoch10/ReVancedRepackaged/shellcheck.yml?logo=github%20actions&logoColor=white&label=shellcheck" alt="GitHub Workflow ShellCheck Status"></a>
+<br>
 <a href="https://github.com/programminghoch10/ReVancedRepackaged/commits/main"><img src="https://img.shields.io/github/last-commit/programminghoch10/ReVancedRepackaged?logo=git&logoColor=white" alt="GitHub last commit"></a>
 <a href="https://github.com/programminghoch10/ReVancedRepackaged/compare/"><img src="https://img.shields.io/github/commits-since/programminghoch10/ReVancedRepackaged/latest?logo=git&logoColor=white" alt="GitHub commits since last release"></a>
 

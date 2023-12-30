@@ -1,0 +1,23 @@
+
+# enable additional checks
+enable=add-default-case
+enable=avoid-nullary-conditions
+enable=check-set-e-suppressed
+enable=check-unassigned-uppercase
+enable=deprecate-which
+
+# unused variable warning
+disable=SC2034
+
+# cd fail
+disable=SC2164
+
+# dont follow source files
+disable=SC1091
+
+# unnecessary arithmetic variables style
+disable=SC2004
+
+# variables in printf string
+#  we use variables as constants for defining the pattern at the beginning of the file
+disable=SC2059
