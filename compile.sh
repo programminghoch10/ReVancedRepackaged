@@ -68,6 +68,12 @@ for package in $(cut -d$'\t' -f1 <<< "$PATCHES_LIST" | sort -u); do
     [ $(wc -l < magiskmodule/packageversions/"$package") -gt 0 ] && echo >> magiskmodule/supportedversions.md
 done
 
+java -jar revanced-cli.jar \
+    options \
+    --path=magiskmodule/options.json \
+    --overwrite \
+    "$(basename "$REVANCED_PATCHES_DL")"
+
 cp -v revanced-android/revancedcliwrapper/build/outputs/apk/release/revancedcliwrapper-release.apk magiskmodule/revancedandroidcli.apk
 cp -v "$(basename "$REVANCED_INTEGRATIONS_DL")" magiskmodule/integrations.apk
 cp -v "$(basename "$REVANCED_PATCHES_DL")" magiskmodule/patches.jar

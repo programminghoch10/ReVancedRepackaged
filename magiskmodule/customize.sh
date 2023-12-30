@@ -77,6 +77,13 @@ patchAPK() {
     cd "$TMPDIR"
 
     ui_print "- Patching $packagename"
+    
+    cp "$MODPATH"/options.json options.json
+
+    local optionsconfigfile=""
+    optionsconfigfile="$(findConfigFile revancedrepackaged-options.json)"
+    [ -f "$optionsconfigfile" ] \
+        && cp "$optionsconfigfile" options.json
 
     export MODPATH
     "$MODPATH"/system/bin/revancedcli \
@@ -85,6 +92,7 @@ patchAPK() {
         --merge="$MODPATH"/integrations.apk \
         --out=out.apk \
         --exclude='GmsCore support' \
+        --options=options.json \
         --purge \
         "$apkpath" \
     2>&1 || abort "Patching failed! $?"

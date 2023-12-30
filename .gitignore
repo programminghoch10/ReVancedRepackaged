@@ -9,3 +9,4 @@ magiskmodule/version.sh
 magiskmodule/aapt2lib
 magiskmodule/packageversions
 magiskmodule/supportedversions.md
+magiskmodule/options.json
