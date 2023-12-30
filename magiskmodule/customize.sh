@@ -1,13 +1,12 @@
 #!/system/bin/sh
 
+#shellcheck disable=SC2154
 [ "$BOOTMODE" != "true" ] && abort "Please install this module within the Magisk app."
-
-export IFS=$'\n'
 
 cd "$MODPATH"
 
 [ ! -f ./version.sh ] && abort "Missing version.sh"
-source ./version.sh
+. ./version.sh
 
 MAGISKTMP="$(magisk --path)" || MAGISKTMP=/sbin
 MIRROR="$MAGISKTMP"/.magisk/mirror
@@ -24,8 +23,8 @@ BLACKLIST="$(findConfigFile revancedrepackaged-blacklist.txt)"
 
 ui_print "- Preparing Patching Process"
 
-[ ! -f aapt2lib/$ARCH/libaapt2.so ] && abort "Failed to locate libaapt2.so for $ARCH"
-mv -v aapt2lib/$ARCH/libaapt2.so aapt2
+[ ! -f aapt2lib/"$ARCH"/libaapt2.so ] && abort "Failed to locate libaapt2.so for $ARCH"
+mv -v aapt2lib/"$ARCH"/libaapt2.so aapt2
 rm -r aapt2lib
 chmod -v +x aapt2
 
@@ -34,7 +33,7 @@ chmod -v +x system/bin/revancedcli
 mkdir overlay
 
 processPackage() {
-    local packagename="$1"
+    packagename="$1"
 
     [ -z "$(pm list packages "$packagename")" ] && return
 
@@ -44,7 +43,7 @@ processPackage() {
 
     ui_print "- Processing $packagename"
 
-    installedpackageversion="$(pm dump $packagename | grep -E '^ *versionName=.*$' | cut -d'=' -f2)"
+    installedpackageversion="$(pm dump "$packagename" | grep -E '^ *versionName=.*$' | cut -d'=' -f2)"
 
     [ -s packageversions/"$packagename" ] \
     && ! grep -q -F "$installedpackageversion" < packageversions/"$packagename" \
@@ -72,8 +71,8 @@ processPackage() {
 }
 
 patchAPK() {
-    local packagename="$1"
-    local apkpath="$2"
+    packagename="$1"
+    apkpath="$2"
     cd "$TMPDIR"
 
     ui_print "- Patching $packagename"
@@ -83,7 +82,6 @@ patchAPK() {
     [ -f "$MODPATH"/options/"$packagename".json ] \
         && cp "$MODPATH"/options/"$packagename".json options.json
     
-    local optionsconfigfile=""
     optionsconfigfile="$(findConfigFile revancedrepackaged-options.json)"
     [ -f "$optionsconfigfile" ] \
         && cp "$optionsconfigfile" options.json

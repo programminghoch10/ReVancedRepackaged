@@ -30,7 +30,7 @@ executeGradle() {
 
 (
     cd revanced-cli
-    for patch in $(ls ../revanced-cli-patches/*.patch); do
+    for patch in ../revanced-cli-patches/*.patch; do
         git am --no-3way "$patch"
     done
 )
@@ -41,9 +41,9 @@ git submodule update --checkout
 
 source version.sh
 
-REVANCED_INTEGRATIONS=$(sed -e 's/^v//' <<< "$REVANCED_INTEGRATIONS")
+REVANCED_INTEGRATIONS=${REVANCED_INTEGRATIONS#v}
 printf -v REVANCED_INTEGRATIONS_DL "$REVANCED_INTEGRATIONS_URL" "$REVANCED_INTEGRATIONS" "$REVANCED_INTEGRATIONS"
-REVANCED_PATCHES=$(sed -e 's/^v//' <<< "$REVANCED_PATCHES")
+REVANCED_PATCHES=${REVANCED_PATCHES#v}
 printf -v REVANCED_PATCHES_DL "$REVANCED_PATCHES_URL" "$REVANCED_PATCHES" "$REVANCED_PATCHES"
 
 for dlurl in "$REVANCED_INTEGRATIONS_DL" "$REVANCED_PATCHES_DL"; do
@@ -51,7 +51,7 @@ for dlurl in "$REVANCED_INTEGRATIONS_DL" "$REVANCED_PATCHES_DL"; do
     [ ! -f "$dlfile" ] && wget -c -O "$dlfile" "$dlurl"
 done
 
-REVANCED_CLI=$(sed -e 's/^v//' <<< "$REVANCED_CLI")
+REVANCED_CLI=${REVANCED_CLI#v}
 ln -v -s -f "revanced-cli/build/libs/revancedcli-$REVANCED_CLI-all.jar" "revanced-cli.jar"
 
 PATCHES_LIST=$(java -jar revanced-cli.jar \
@@ -61,11 +61,12 @@ PATCHES_LIST=$(java -jar revanced-cli.jar \
 rm -rf magiskmodule/packageversions
 mkdir magiskmodule/packageversions
 echo '## Supported Packages and Versions' > magiskmodule/supportedversions.md
-for package in $(cut -d$'\t' -f1 <<< "$PATCHES_LIST" | sort -u); do
+cut -d$'\t' -f1 <<< "$PATCHES_LIST" | sort -u | while IFS= read -r package; do
     grep "^$package" <<< "$PATCHES_LIST" | cut -d$'\t' -f2 | tr ',' '\n' | sed -e 's/^ //' -e 's/ $//' -e '/^$/d' | sort -u > magiskmodule/packageversions/"$package"
     echo "- **\`$package\`**" >> magiskmodule/supportedversions.md
+    #shellcheck disable=SC2016
     sed 's/^\(.*\)$/`\1`/' < magiskmodule/packageversions/"$package" | tr '\n' '#' | sed -e '/^$/d' -e 's/#$//' -e 's/#/\n/g' | sed -e 's/^/  - /' >> magiskmodule/supportedversions.md
-    [ $(wc -l < magiskmodule/packageversions/"$package") -gt 0 ] && echo >> magiskmodule/supportedversions.md
+    [ "$(wc -l < magiskmodule/packageversions/"$package")" -gt 0 ] && echo >> magiskmodule/supportedversions.md
 done
 
 java -jar revanced-cli.jar \

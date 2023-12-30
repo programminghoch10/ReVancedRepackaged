@@ -1,10 +1,10 @@
 #!/system/bin/sh
-cd $(dirname $0)
+cd "$(dirname "$0")"
 
-source ./version.sh
+. ./version.sh
 
 logi() {
-    local msg="ReVancedRepackaged: $1"
+    msg="ReVancedRepackaged: $1"
     log -t Magisk "$msg"
     echo "$msg" >> /cache/magisk.log
 }
@@ -19,16 +19,16 @@ MAGISKTMP="$(magisk --path)" || MAGISKTMP=/sbin
 MIRROR="$MAGISKTMP"/.magisk/mirror
 
 checkHash() {
-    local packagename="$1"
-    local apkpath="$2"
+    packagename="$1"
+    apkpath="$2"
     [ "$(sha256sum < "$apkpath")" = "$(cat overlay/"$packagename".sha256sum)" ] && return 0
-    logi "Package $package has changed their base.apk! Removing their overlay, because a repatch is required."
+    logi "Package $packagename has changed their base.apk! Removing their overlay, because a repatch is required."
     rm overlay/"$packagename".*
     return 1
 }
 
 overlayPackage() {
-    local packagename="$1"
+    packagename="$1"
     logi "Overlaying $packagename"
 
     overlayapk=$(pwd)/overlay/"$packagename".apk
