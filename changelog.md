@@ -1,2 +1,3 @@
-* revanced-patches `v4.3.0`
-* revanced-integrations `v1.4.0`
+* revanced-patches `v4.4.0`
+* revanced-integrations `v1.5.0`
+* revanced-cli `v4.5.0`
