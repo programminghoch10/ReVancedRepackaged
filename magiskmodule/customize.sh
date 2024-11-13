@@ -8,14 +8,18 @@ cd "$MODPATH"
 [ ! -f ./version.sh ] && abort "Missing version.sh"
 . ./version.sh
 
-MAGISKTMP="$(magisk --path)" || MAGISKTMP=/sbin
-MIRROR="$MAGISKTMP"/.magisk/mirror
-ui_print "- Found Magisk mirror at $MIRROR"
-
 findConfigFile() {
     for path in /storage/emulated/0 /data/adb; do
         [ -f "$path/$1" ] && echo "$path/$1" && break
     done
+}
+
+#shellcheck disable=SC2154
+[ "$MAGISK_VER_CODE" -ge 23010 ] || abort "magisk version $MAGISK_VER_CODE unsupported"
+[ -n "$(command -v magisk)" ] || abort "magisk command not found"
+magisk --denylist exec true || abort "magisk denylist exec failed"
+denylist_run() {
+  magisk --denylist exec "$@"
 }
 
 BLACKLIST="$(findConfigFile revancedrepackaged-blacklist.txt)"
@@ -23,6 +27,7 @@ BLACKLIST="$(findConfigFile revancedrepackaged-blacklist.txt)"
 
 ui_print "- Preparing Patching Process"
 
+#shellcheck disable=SC2154
 [ ! -f aapt2lib/"$ARCH"/libaapt2.so ] && abort "Failed to locate libaapt2.so for $ARCH"
 mv -v aapt2lib/"$ARCH"/libaapt2.so aapt2
 rm -r aapt2lib
@@ -60,12 +65,10 @@ processPackage() {
 
     ui_print "- Found APK at $apkpath"
 
-    apkpath="$MIRROR"/"$apkpath"
-
     patchAPK "$packagename" "$apkpath"
     
     [ ! -f overlay/"$packagename".apk ] && abort "Couldn't locate patched file!"
-    sha256sum < "$apkpath" > overlay/"$packagename".sha256sum
+    denylist_run cat "$apkpath" | sha256sum > overlay/"$packagename".sha256sum
 
     chcon u:object_r:apk_data_file:s0 overlay/"$packagename".apk
 }
@@ -74,6 +77,7 @@ patchAPK() {
     packagename="$1"
     apkpath="$2"
     cd "$TMPDIR"
+    denylist_run cat "$apkpath" > app.apk
 
     ui_print "- Patching $packagename"
     
@@ -98,12 +102,13 @@ patchAPK() {
         --include='Custom branding' \
         --options=options.json \
         --purge \
-        "$apkpath" \
+        app.apk \
     2>&1 || abort "Patching failed! $?"
 
     [ ! -f out.apk ] && abort "Patching failed!"
 
     mv -v out.apk "$MODPATH"/overlay/"$packagename".apk
+    rm app.apk
 
     cd "$MODPATH"
 }

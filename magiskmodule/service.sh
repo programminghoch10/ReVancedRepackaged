@@ -4,24 +4,32 @@ cd "$(dirname "$0")"
 . ./version.sh
 
 logi() {
-    msg="ReVancedRepackaged: $1"
+    msg="ReVancedRepackaged: $*"
     log -t Magisk "$msg"
     echo "$msg" >> /cache/magisk.log
 }
+abort() {
+    logi "$@"
+    touch remove
+    exit 1
+}
 
-[ -z "$(ls overlay)" ] && logi "No overlays found!" && touch remove && exit 1
+[ -z "$(command -v magisk)" ] && abort "magisk command not found"
+magisk --denylist exec true || abort "magisk denylist exec failed"
+denylist_run() {
+  magisk --denylist exec "$@"
+}
+
+[ -z "$(ls overlay)" ] && abort "No overlays found!"
 
 while [ "$(getprop sys.boot_completed)" != "1" ]; do
     sleep 1
 done
 
-MAGISKTMP="$(magisk --path)" || MAGISKTMP=/sbin
-MIRROR="$MAGISKTMP"/.magisk/mirror
-
 checkHash() {
     packagename="$1"
     apkpath="$2"
-    [ "$(sha256sum < "$apkpath")" = "$(cat overlay/"$packagename".sha256sum)" ] && return 0
+    [ "$(denylist_run cat "$apkpath" | sha256sum)" = "$(cat overlay/"$packagename".sha256sum)" ] && return 0
     logi "Package $packagename has changed their base.apk! Removing their overlay, because a repatch is required."
     rm overlay/"$packagename".*
     return 1
@@ -38,8 +46,9 @@ overlayPackage() {
         | cut -d':' -f2)
 
     [ -z "$apkpath" ] && \
-        apkpath=$(find -H \
-        "$MIRROR"/data/app \
+        apkpath=$(denylist_run \
+        find -H \
+        /data/app \
         -wholename "*${packagename}*/base.apk")
 
     [ -z "$apkpath" ] \
@@ -48,7 +57,7 @@ overlayPackage() {
 
     checkHash "$packagename" "$apkpath" || return 1
 
-    mount -o bind "$MIRROR"/"$overlayapk" "$apkpath" || {
+    mount -o bind "$overlayapk" "$apkpath" || {
         logi "Failed to mount $overlayapk on $apkpath"
         return 1
     }
