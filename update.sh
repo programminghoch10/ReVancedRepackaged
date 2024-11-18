@@ -18,14 +18,6 @@ else
     echo "No update for REVANCED_PATCHES $REVANCED_PATCHES found"
 fi
 
-REVANCED_INTEGRATIONS_TAG=$(curl -s https://api.github.com/repos/revanced/revanced-integrations/releases/latest | jq -r '.tag_name')
-if [ "$REVANCED_INTEGRATIONS" != "$REVANCED_INTEGRATIONS_TAG" ]; then
-    sed -i "s/^REVANCED_INTEGRATIONS=.*$/REVANCED_INTEGRATIONS=\"$REVANCED_INTEGRATIONS_TAG\"/" version.sh
-    echo "Updated REVANCED_INTEGRATIONS from $REVANCED_INTEGRATIONS to $REVANCED_INTEGRATIONS_TAG"
-else
-    echo "No update for REVANCED_INTEGRATIONS $REVANCED_INTEGRATIONS found"
-fi
-
 REVANCED_CLI_TAG=$(curl -s https://api.github.com/repos/revanced/revanced-cli/releases/latest | jq -r '.tag_name')
 if [ "$REVANCED_CLI" != "$REVANCED_CLI_TAG" ]; then
     (
@@ -47,5 +39,4 @@ update ReVanced
 
 * revanced-cli \`$REVANCED_CLI\`
 * revanced-patches \`$REVANCED_PATCHES\`
-* revanced-integrations \`$REVANCED_INTEGRATIONS\`
 EOF

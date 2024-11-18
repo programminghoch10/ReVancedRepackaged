@@ -2,6 +2,7 @@
 *.apk
 *.zip
 *.jar
+*.rvp
 
 magiskmodule/README.md
 magiskmodule/module.prop

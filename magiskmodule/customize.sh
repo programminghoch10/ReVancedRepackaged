@@ -80,27 +80,17 @@ patchAPK() {
     denylist_run cat "$apkpath" > app.apk
 
     ui_print "- Patching $packagename"
-    
-    cp "$MODPATH"/options.json options.json
-
-    [ -f "$MODPATH"/options/"$packagename".json ] \
-        && cp "$MODPATH"/options/"$packagename".json options.json
-    
-    optionsconfigfile="$(findConfigFile revancedrepackaged-options.json)"
-    [ -f "$optionsconfigfile" ] \
-        && cp "$optionsconfigfile" options.json
-
-    sed -i "s|\$MODPATH|$MODPATH|g" options.json
 
     export MODPATH
     "$MODPATH"/system/bin/revancedcli \
         patch \
-        --patch-bundle="$MODPATH"/patches.jar \
-        --merge="$MODPATH"/integrations.apk \
+        --patches="$MODPATH"/patches.rvp \
         --out=out.apk \
-        --exclude='GmsCore support' \
-        --include='Custom branding' \
-        --options=options.json \
+        --disable='GmsCore support' \
+        --enable='Custom branding' \
+        --options=usePremiumHeading=false \
+        --options=appName=YouTube \
+        --options=iconPath="$MODPATH/logo" \
         --purge \
         app.apk \
     2>&1 || abort "Patching failed! $?"

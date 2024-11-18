@@ -10,8 +10,7 @@ done
 [ -z "$GITHUB_TOKEN" ] && echo "missing GITHUB_TOKEN" && exit 1
 
 declare -x GITHUB_ACTOR GITHUB_TOKEN
-REVANCED_INTEGRATIONS_URL="https://github.com/revanced/revanced-integrations/releases/download/v%s/revanced-integrations-%s.apk"
-REVANCED_PATCHES_URL="https://github.com/revanced/revanced-patches/releases/download/v%s/revanced-patches-%s.jar"
+REVANCED_PATCHES_URL="https://github.com/revanced/revanced-patches/releases/download/v%s/patches-%s.rvp"
 
 git submodule update --checkout
 git clean -fdx magiskmodule/
@@ -41,15 +40,9 @@ git submodule update --checkout
 
 source version.sh
 
-REVANCED_INTEGRATIONS=${REVANCED_INTEGRATIONS#v}
-printf -v REVANCED_INTEGRATIONS_DL "$REVANCED_INTEGRATIONS_URL" "$REVANCED_INTEGRATIONS" "$REVANCED_INTEGRATIONS"
 REVANCED_PATCHES=${REVANCED_PATCHES#v}
 printf -v REVANCED_PATCHES_DL "$REVANCED_PATCHES_URL" "$REVANCED_PATCHES" "$REVANCED_PATCHES"
-
-for dlurl in "$REVANCED_INTEGRATIONS_DL" "$REVANCED_PATCHES_DL"; do
-    dlfile="$(basename "$dlurl")"
-    [ ! -f "$dlfile" ] && wget -c -O "$dlfile" "$dlurl"
-done
+[ ! -f "$(basename "$REVANCED_PATCHES_DL")" ] && wget -c -O "$(basename "$REVANCED_PATCHES_DL")" "$REVANCED_PATCHES_DL"
 
 REVANCED_CLI=${REVANCED_CLI#v}
 ln -v -s -f "revanced-cli/build/libs/revancedcli-$REVANCED_CLI-all.jar" "revanced-cli.jar"
@@ -69,19 +62,11 @@ cut -d$'\t' -f1 <<< "$PATCHES_LIST" | sort -u | while IFS= read -r package; do
     [ "$(wc -l < magiskmodule/packageversions/"$package")" -gt 0 ] && echo >> magiskmodule/supportedversions.md
 done
 
-java -jar revanced-cli.jar \
-    options \
-    --path=magiskmodule/options.json \
-    --overwrite \
-    "$(basename "$REVANCED_PATCHES_DL")"
-
 logo/convert.sh
 
 cp -v revanced-android/revancedcliwrapper/build/outputs/apk/release/revancedcliwrapper-release.apk magiskmodule/revancedandroidcli.apk
-cp -v "$(basename "$REVANCED_INTEGRATIONS_DL")" magiskmodule/integrations.apk
-cp -v "$(basename "$REVANCED_PATCHES_DL")" magiskmodule/patches.jar
+cp -v "$(basename "$REVANCED_PATCHES_DL")" magiskmodule/patches.rvp
 cp -r -v --no-target-directory aapt2 magiskmodule/aapt2lib
-cp -r -v --no-target-directory revanced-options magiskmodule/options
 cp -r --no-target-directory logo/assets magiskmodule/logo
 cp README.md magiskmodule/README.md
 

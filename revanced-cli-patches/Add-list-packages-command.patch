@@ -1,23 +1,23 @@
-From 3f81a5fc02129d13a873fbcdb43ab665a234a821 Mon Sep 17 00:00:00 2001
+From feedf61f73fa43fa162a2f72baee1204d3d9bb43 Mon Sep 17 00:00:00 2001
 From: programminghoch10 <16062290+programminghoch10@users.noreply.github.com>
 Date: Mon, 28 Aug 2023 13:02:03 +0200
 Subject: [PATCH] Add list packages command
 
 ---
- .../cli/command/ListPackagesCommand.kt        | 37 +++++++++++++++++++
+ .../cli/command/ListPackagesCommand.kt        | 38 +++++++++++++++++++
  .../app/revanced/cli/command/MainCommand.kt   |  1 +
- 2 files changed, 38 insertions(+)
+ 2 files changed, 39 insertions(+)
  create mode 100644 src/main/kotlin/app/revanced/cli/command/ListPackagesCommand.kt
 
 diff --git a/src/main/kotlin/app/revanced/cli/command/ListPackagesCommand.kt b/src/main/kotlin/app/revanced/cli/command/ListPackagesCommand.kt
 new file mode 100644
-index 0000000..2b5477f
+index 0000000..d2dae8f
 --- /dev/null
 +++ b/src/main/kotlin/app/revanced/cli/command/ListPackagesCommand.kt
-@@ -0,0 +1,37 @@
+@@ -0,0 +1,38 @@
 +package app.revanced.cli.command
 +
-+import app.revanced.patcher.PatchBundleLoader
++import app.revanced.patcher.patch.loadPatchesFromJar
 +import picocli.CommandLine.Command
 +import picocli.CommandLine.Parameters
 +import java.io.File
@@ -30,20 +30,21 @@ index 0000000..2b5477f
 +    private val logger = Logger.getLogger(ListPackagesCommand::class.java.name)
 +
 +    @Parameters(
-+        description = ["Paths to patch bundles"], arity = "1..*"
++        description = ["Paths to RVP files."],
++        arity = "1..*",
 +    )
-+    private lateinit var patchBundles: Array<File>
++    private lateinit var patchesFiles: Set<File>
 +
 +    override fun run() {
 +        val supportedVersions: HashMap<String, HashSet<String>> = HashMap()
-+        val patchBundle = PatchBundleLoader.Jar(*patchBundles)
++        val patchBundle = loadPatchesFromJar(patchesFiles)
 +        patchBundle
 +            .filter { it.compatiblePackages != null }
 +            .flatMap { it.compatiblePackages!!.toList() }
 +            .forEach {
-+                if (!supportedVersions.containsKey(it.name))
-+                    supportedVersions[it.name] = HashSet()
-+                it.versions?.let { versions -> supportedVersions[it.name]!!.addAll(versions) }
++                if (!supportedVersions.containsKey(it.first))
++                    supportedVersions[it.first] = HashSet()
++                it.second?.let { versions -> supportedVersions[it.first]!!.addAll(versions) }
 +            }
 +        logger.info(
 +            supportedVersions.keys.joinToString("\n") {
@@ -54,17 +55,17 @@ index 0000000..2b5477f
 +}
 \ No newline at end of file
 diff --git a/src/main/kotlin/app/revanced/cli/command/MainCommand.kt b/src/main/kotlin/app/revanced/cli/command/MainCommand.kt
-index 4d33a4d..eb754a2 100644
+index 5ceeef1..50ca16c 100644
 --- a/src/main/kotlin/app/revanced/cli/command/MainCommand.kt
 +++ b/src/main/kotlin/app/revanced/cli/command/MainCommand.kt
-@@ -36,6 +36,7 @@ private object CLIVersionProvider : IVersionProvider {
+@@ -35,6 +35,7 @@ private object CLIVersionProvider : IVersionProvider {
+     subcommands = [
          PatchCommand::class,
-         OptionsCommand::class,
          ListPatchesCommand::class,
 +        ListPackagesCommand::class,
          ListCompatibleVersions::class,
          UtilityCommand::class,
      ],
 -- 
-2.43.0
+2.45.2
 

@@ -76,14 +76,6 @@ If you want to exclude certain apps from being patched,
 add their packagename into a config file called `revancedrepackaged-blacklist.txt`
 and place it into the configuration directory.
 
-### Patch Options
-
-If you want to supply an `options.json` for patching,
-rename it to `revancedrepackaged-options.json` 
-and place it into the configuration directory.
-
-A default `options.json` for your reference can be found inside the module zip.
-
 ## Issues and Support
 
 You are welcome to 
