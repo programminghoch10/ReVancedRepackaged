@@ -17,14 +17,7 @@ dependencyResolutionManagement {
         mavenCentral()
         google()
         maven {
-            url = uri("https://maven.pkg.github.com/revanced/revanced-patcher")
-            credentials {
-                username = githubUsername
-                password = githubPassword
-            }
-        }
-        maven {
-            url = uri("https://maven.pkg.github.com/revanced/jadb")
+            url = uri("https://maven.pkg.github.com/revanced/registry")
             credentials {
                 username = githubUsername
                 password = githubPassword
