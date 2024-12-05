@@ -1,5 +1,7 @@
 #!/bin/bash
 set -e
+shopt -s inherit_errexit
+set -o pipefail
 
 for cmd in git wget zip java; do
     [ -z "$(command -v "$cmd")" ] && echo "missing $cmd" && exit 1
@@ -10,46 +12,49 @@ done
 [ -z "$GITHUB_TOKEN" ] && echo "missing GITHUB_TOKEN" && exit 1
 
 declare -x GITHUB_ACTOR GITHUB_TOKEN
-REVANCED_PATCHES_URL="https://github.com/revanced/revanced-patches/releases/download/v%s/patches-%s.rvp"
 
 git submodule update --checkout
 git clean -fdx magiskmodule/
 
 executeGradle() {
     (
-        cd revanced-android
+        cd "$1"
+        shift
         ./gradlew "$@"
+    )
+}
+applyPatches() {
+    (
+        cd "$1"
+        for patch in ../"$1"-patches/*.patch; do
+            git am --no-3way "$patch"
+        done
     )
 }
 
 [ "$1" = "clean" ] && {
-    executeGradle clean
+    executeGradle revanced-android clean
+    executeGradle revanced-patches clean
     exit
 }
 
-(
-    cd revanced-cli
-    for patch in ../revanced-cli-patches/*.patch; do
-        git am --no-3way "$patch"
-    done
-)
+applyPatches revanced-cli
+executeGradle revanced-android assemble :revancedcli:shadowJar
 
-executeGradle assemble :revancedcli:shadowJar
+applyPatches revanced-patches
+executeGradle revanced-patches buildAndroid
 
 git submodule update --checkout
 
 source version.sh
 
 REVANCED_PATCHES=${REVANCED_PATCHES#v}
-printf -v REVANCED_PATCHES_DL "$REVANCED_PATCHES_URL" "$REVANCED_PATCHES" "$REVANCED_PATCHES"
-[ ! -f "$(basename "$REVANCED_PATCHES_DL")" ] && wget -c -O "$(basename "$REVANCED_PATCHES_DL")" "$REVANCED_PATCHES_DL"
-
 REVANCED_CLI=${REVANCED_CLI#v}
-ln -v -s -f "revanced-cli/build/libs/revancedcli-$REVANCED_CLI-all.jar" "revanced-cli.jar"
+ln -v -s -f revanced-cli/build/libs/revancedcli-"$REVANCED_CLI"-all.jar revanced-cli.jar
 
 PATCHES_LIST=$(java -jar revanced-cli.jar \
     list-packages \
-    "$(basename "$REVANCED_PATCHES_DL")" \
+    revanced-patches/patches/build/libs/patches-"$REVANCED_PATCHES".rvp \
 | sed 's/^INFORMATION: \s*//')
 rm -rf magiskmodule/packageversions
 mkdir magiskmodule/packageversions
@@ -65,7 +70,7 @@ done
 logo/convert.sh
 
 cp -v revanced-android/revancedcliwrapper/build/outputs/apk/release/revancedcliwrapper-release.apk magiskmodule/revancedandroidcli.apk
-cp -v "$(basename "$REVANCED_PATCHES_DL")" magiskmodule/patches.rvp
+cp -v revanced-patches/patches/build/libs/patches-"$REVANCED_PATCHES".rvp magiskmodule/patches.rvp
 cp -r -v --no-target-directory aapt2 magiskmodule/aapt2lib
 cp -r --no-target-directory logo/assets magiskmodule/logo
 cp README.md magiskmodule/README.md

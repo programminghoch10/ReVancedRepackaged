@@ -1,3 +1,6 @@
 [submodule "revanced-cli"]
 	path = revanced-cli
 	url = https://github.com/revanced/revanced-cli
+[submodule "revanced-patches"]
+	path = revanced-patches
+	url = https://github.com/revanced/revanced-patches

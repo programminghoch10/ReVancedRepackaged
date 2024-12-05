@@ -12,6 +12,12 @@ source version.sh
 
 REVANCED_PATCHES_TAG=$(curl -s https://api.github.com/repos/revanced/revanced-patches/releases/latest | jq -r '.tag_name')
 if [ "$REVANCED_PATCHES" != "$REVANCED_PATCHES_TAG" ]; then
+    (
+        git submodule update --checkout
+        cd revanced-patches
+        git fetch --all --quiet
+        git checkout "$REVANCED_PATCHES_TAG"
+    )
     sed -i "s/^REVANCED_PATCHES=.*$/REVANCED_PATCHES=\"$REVANCED_PATCHES_TAG\"/" version.sh
     echo "Updated REVANCED_PATCHES from $REVANCED_PATCHES to $REVANCED_PATCHES_TAG"
 else
