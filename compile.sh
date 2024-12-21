@@ -65,6 +65,7 @@ cut -d$'\t' -f1 <<< "$PATCHES_LIST" | sort -u | while IFS= read -r package; do
     #shellcheck disable=SC2016
     sed 's/^\(.*\)$/`\1`/' < magiskmodule/packageversions/"$package" | tr '\n' '#' | sed -e '/^$/d' -e 's/#$//' -e 's/#/\n/g' | sed -e 's/^/  - /' >> magiskmodule/supportedversions.md
     [ "$(wc -l < magiskmodule/packageversions/"$package")" -gt 0 ] && echo >> magiskmodule/supportedversions.md
+    true
 done
 
 logo/convert.sh
