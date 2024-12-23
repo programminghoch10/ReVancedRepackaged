@@ -1,6 +1,6 @@
-From 7b6d527f31ae0e1f2b9aa1b357dd4e9ed4e95e36 Mon Sep 17 00:00:00 2001
+From 245fb7a51b085f0b9761e174a212ef0e9ee61d0a Mon Sep 17 00:00:00 2001
 From: programminghoch10 <16062290+programminghoch10@users.noreply.github.com>
-Date: Thu, 5 Dec 2024 21:09:36 +0100
+Date: Mon, 23 Dec 2024 22:51:27 +0100
 Subject: [PATCH] remove CheckEnvironmentPatch
 
 since we build on device this patch is not required
@@ -9,13 +9,13 @@ since we build on device this patch is not required
  1 file changed, 3 deletions(-)
 
 diff --git a/patches/src/main/kotlin/app/revanced/patches/youtube/misc/settings/SettingsPatch.kt b/patches/src/main/kotlin/app/revanced/patches/youtube/misc/settings/SettingsPatch.kt
-index 627a70f91..e15fc9d00 100644
+index 5eb29385..bcc8a8f7 100644
 --- a/patches/src/main/kotlin/app/revanced/patches/youtube/misc/settings/SettingsPatch.kt
 +++ b/patches/src/main/kotlin/app/revanced/patches/youtube/misc/settings/SettingsPatch.kt
-@@ -118,9 +118,6 @@ val settingsPatch = bytecodePatch(
-         settingsResourcePatch,
+@@ -120,9 +120,6 @@ val settingsPatch = bytecodePatch(
          addResourcesPatch,
          disableCairoSettingsPatch,
+         fixPlaybackSpeedWhilePlayingPatch,
 -        // Currently there is no easy way to make a mandatory patch,
 -        // so for now this is a dependent of this patch.
 -        checkEnvironmentPatch,
