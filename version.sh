@@ -1,4 +1,4 @@
 #!/bin/bash
 
-REVANCED_PATCHES="v5.8.0"
+REVANCED_PATCHES="v5.9.0"
 REVANCED_CLI="v5.0.0"
