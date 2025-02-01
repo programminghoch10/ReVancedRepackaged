@@ -1,1 +1,1 @@
-* revanced-patches `v5.9.0`
+* revanced-patches `v5.10.0`
