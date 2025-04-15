@@ -1,1 +1,2 @@
-* revanced-patches `v5.18.0`
+* revanced-cli `v5.0.1`
+* revanced-patches `v5.20.1`
