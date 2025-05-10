@@ -2,6 +2,9 @@
 set -e
 cd "$(dirname "$(readlink -f "$0")")"
 
+# workaround for https://gitlab.com/inkscape/inkscape/-/issues/4716#note_1898150983
+export SELF_CALL=disable
+
 generateImage() {
     local infile="$1"
     local outfile="$2"
@@ -32,14 +35,14 @@ for image in "${CONVERSION[@]}"; do
             generateImage "$infile" "$outfolder"/"$outfile" "$size" &
         done
         ;;
-    static)
+        static)
         for format in hdpi:72 mdpi:48 xhdpi:96 xxhdpi:144 xxxhdpi:192; do
             outfolder=assets/mipmap-"$(cut -d':' -f1 <<< "$format")"
             size="$(cut -d':' -f2 <<< "$format")"
             generateImage "$infile" "$outfolder"/"$outfile" "$size" &
         done
         ;;
-    *)
+        *)
         echo "unknown type $type" >&2
         exit 1
     esac
