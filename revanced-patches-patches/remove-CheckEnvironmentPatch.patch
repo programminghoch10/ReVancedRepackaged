@@ -1,4 +1,4 @@
-From 6017a43c094f7a20d2b86f484933a55bb63bde8f Mon Sep 17 00:00:00 2001
+From 2c092c99dd959ed751101877102deebbdbab481a Mon Sep 17 00:00:00 2001
 From: programminghoch10 <16062290+programminghoch10@users.noreply.github.com>
 Date: Mon, 27 Jan 2025 11:29:44 +0100
 Subject: [PATCH] remove CheckEnvironmentPatch
@@ -9,10 +9,10 @@ since we build on device this patch is not required
  1 file changed, 3 deletions(-)
 
 diff --git a/patches/src/main/kotlin/app/revanced/patches/youtube/misc/settings/SettingsPatch.kt b/patches/src/main/kotlin/app/revanced/patches/youtube/misc/settings/SettingsPatch.kt
-index 8bf7cfc06..3085a90be 100644
+index fce41f327..4bf9552ce 100644
 --- a/patches/src/main/kotlin/app/revanced/patches/youtube/misc/settings/SettingsPatch.kt
 +++ b/patches/src/main/kotlin/app/revanced/patches/youtube/misc/settings/SettingsPatch.kt
-@@ -141,9 +141,6 @@ val settingsPatch = bytecodePatch(
+@@ -181,9 +181,6 @@ val settingsPatch = bytecodePatch(
          addResourcesPatch,
          versionCheckPatch,
          fixPlaybackSpeedWhilePlayingPatch,
@@ -21,7 +21,7 @@ index 8bf7cfc06..3085a90be 100644
 -        checkEnvironmentPatch,
      )
  
-     val extensionPackage = "app/revanced/extension/youtube"
+     execute {
 -- 
-2.45.2
+2.47.2
 
