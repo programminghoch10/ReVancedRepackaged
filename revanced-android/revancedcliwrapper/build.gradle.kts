@@ -7,7 +7,6 @@ android {
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.programminghoch10.revancedandroidcli"
         minSdk = 23
         targetSdk = 35
         versionCode = 1
