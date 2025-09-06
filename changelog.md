@@ -1,2 +1,2 @@
-* revanced-patches `v5.32.0`
+* revanced-patches `v5.34.0`
 * update gradle
