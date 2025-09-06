@@ -4,11 +4,11 @@ plugins {
 
 android {
     namespace = "com.programminghoch10.revancedandroidcli"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         minSdk = 23
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
     }
