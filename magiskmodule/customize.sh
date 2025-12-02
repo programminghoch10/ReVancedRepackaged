@@ -81,16 +81,21 @@ patchAPK() {
 
     ui_print "- Patching $packagename"
 
+    set --
+    [ "$packagename" = com.google.android.youtube ] && \
+        set -- "$@" \
+        --enable='Custom branding' \
+        --options=usePremiumHeading=false \
+        --options=customName=YouTube \
+        --options=customIcon="$MODPATH/logo"
+
     export MODPATH
     "$MODPATH"/system/bin/revancedcli \
         patch \
         --patches="$MODPATH"/patches.rvp \
         --out=out.apk \
         --disable='GmsCore support' \
-        --enable='Custom branding' \
-        --options=usePremiumHeading=false \
-        --options=appName=YouTube \
-        --options=iconPath="$MODPATH/logo" \
+        "$@" \
         --purge \
         app.apk \
     2>&1 || abort "Patching failed! $?"
