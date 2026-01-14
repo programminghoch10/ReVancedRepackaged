@@ -87,10 +87,6 @@ patchAPK() {
         --patches="$MODPATH"/patches.rvp \
         --out=out.apk \
         --disable='GmsCore support' \
-        --enable='Custom branding' \
-        --options=usePremiumHeading=false \
-        --options=appName=YouTube \
-        --options=iconPath="$MODPATH/logo" \
         --purge \
         app.apk \
     2>&1 || abort "Patching failed! $?"

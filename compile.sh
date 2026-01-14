@@ -68,12 +68,9 @@ cut -d$'\t' -f1 <<< "$PATCHES_LIST" | sort -u | while IFS= read -r package; do
     true
 done
 
-logo/convert.sh
-
 cp -v revanced-android/revancedcliwrapper/build/outputs/apk/release/revancedcliwrapper-release.apk magiskmodule/revancedandroidcli.apk
 cp -v revanced-patches/patches/build/libs/patches-"$REVANCED_PATCHES".rvp magiskmodule/patches.rvp
 cp -r -v --no-target-directory aapt2 magiskmodule/aapt2lib
-cp -r --no-target-directory logo/assets magiskmodule/logo
 cp README.md magiskmodule/README.md
 
 [ -n "$(git status --porcelain)" ] && CHANGES="+" || CHANGES="-"
