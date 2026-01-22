@@ -1,1 +1,2 @@
-* revanced-patches `v5.46.0`
+* revanced-patches `v5.48.0`
+* remove custom branding
