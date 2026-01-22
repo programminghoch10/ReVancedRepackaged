@@ -10,6 +10,8 @@ done
 [ -f .gitauth ] && source .gitauth
 [ -z "$GITHUB_ACTOR" ] && echo "missing GITHUB_ACTOR" && exit 1
 [ -z "$GITHUB_TOKEN" ] && echo "missing GITHUB_TOKEN" && exit 1
+export ORG_GRADLE_PROJECT_githubPackagesUsername="$GITHUB_ACTOR"
+export ORG_GRADLE_PROJECT_githubPackagesPassword="$GITHUB_TOKEN"
 
 declare -x GITHUB_ACTOR GITHUB_TOKEN
 
